@@ -32,13 +32,12 @@ def draw_grid(grid, live_color, death_color):
 
 
 def count_neighbours(x,y, grid):
+  if x == 0 or x == len(grid)-1 or y == 0 or y == len(grid[1])-1:
+    return
   nsum = 0 
-
   for i in range(-1, 2):
     for j in range(-1, 2):
-      col = (x + i + rows) % rows;
-      row = (y + j + columns) % columns;
-      nsum += grid[col][row];
+      nsum += grid[i+x][j+y];
 
   nsum -= grid[x][y]
   return nsum;
@@ -87,7 +86,13 @@ def main():
 
       if pygame.mouse.get_pressed()[0]:
         pos = pygame.mouse.get_pos()
-        grid_array[pos[0] // RES, pos[1] // RES] = 1
+        col = pos[0] // RES 
+        row = pos[1] // RES 
+        if col == 0 or col == len(grid_array)-1 or row == 0 or row == len(grid_array[1]):
+          # If the user presses on one of the edges than ignore it 
+          pass
+        else:
+          grid_array[col, row] = 1
         draw_grid(grid_array, WHITE, BLUE) 
         pygame.display.update()
 
@@ -96,7 +101,7 @@ def main():
       draw_grid(game_of_life(grid_array), WHITE, BLUE)
       pygame.display.update()
     
-    time.sleep(0.1)
+    time.sleep(0.05)
 
 if __name__ == "__main__":
   main()
