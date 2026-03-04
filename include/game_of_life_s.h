@@ -5,6 +5,9 @@
  * @date 02/03/2026
  */
 
+#ifndef __GAME_OF_LIFE_S__
+#define __GAME_OF_LIFE_S__
+
 /*** Enums ***/
 typedef enum game_of_life_status_e
 {
@@ -12,3 +15,5 @@ typedef enum game_of_life_status_e
 
     GAME_OF_LIFE_STATUS_SUCCESS = 0
 } game_of_life_status_e;
+
+#endif

@@ -118,7 +118,11 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/artist.o
+GENERATED += $(OBJDIR)/game_of_life.o
 GENERATED += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/artist.o
+OBJECTS += $(OBJDIR)/game_of_life.o
 OBJECTS += $(OBJDIR)/main.o
 
 # Rules
@@ -183,6 +187,12 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/artist.o: src/artist.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/game_of_life.o: src/game_of_life.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"

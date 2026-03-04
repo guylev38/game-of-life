@@ -20,14 +20,16 @@
 #define SCREEN_HEIGHT (600)
 #define WINDOW_TITLE ("Game of Life")
 #define FPS (60)
-#define RESOLUTION (SCREEN_WIDTH / 20)
+#define CELL_SIZE (30)
+#define GRID_WIDTH (SCREEN_WIDTH / CELL_SIZE)
+#define GRID_HEIGHT (SCREEN_HEIGHT / CELL_SIZE)
 
 /*** Functions ***/
 
 /**
  * @brief Draws the grid from a 2D array of Cell structs.
  *
- * @param grid 2D array of Cell structs representing the grid.
+ * @param[in] grid 2D array of Cell structs representing the grid.
  * @return game_of_life_status_e
  */
 game_of_life_status_e GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid);

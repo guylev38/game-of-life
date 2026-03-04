@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
+#include "raylib.h"
 
 /*** Structs ***/
 
@@ -21,7 +22,7 @@
  */
 typedef struct cell
 {
-    Rectangle *rect;
+    Rectangle rect;
     u_int32_t state;
 } cell_s;
 
