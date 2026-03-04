@@ -19,7 +19,7 @@
 #define SCREEN_WIDTH (600)
 #define SCREEN_HEIGHT (600)
 #define WINDOW_TITLE ("Game of Life")
-#define FPS (60)
+#define FPS (10)
 #define CELL_SIZE (30)
 #define GRID_WIDTH (SCREEN_WIDTH / CELL_SIZE)
 #define GRID_HEIGHT (SCREEN_HEIGHT / CELL_SIZE)

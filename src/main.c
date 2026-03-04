@@ -6,6 +6,7 @@
 /*** Includes ***/
 
 #include <stdio.h>
+#include <time.h>
 #include "raylib.h"
 #include "../include/artist.h"
 #include "../include/game_of_life.h"
@@ -16,41 +17,69 @@ int main(void)
 {
 	game_of_life_status_e status = GAME_OF_LIFE_STATUS_UNINITIALIZED;
 
-	// Startup
+	/* Startup */
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
 	SetTargetFPS(FPS);
 
-	cell_s **old_grid, **curr_grid = NULL;
+	cell_s **curr_grid = NULL, **next_grid = NULL;
+	cell_s ***h_current = &curr_grid, ***h_next = &next_grid, **tmp = NULL;
+	size_t gen = 0;
 
-	status = GAME_OF_LIFE_init_grid(&curr_grid);
+	/* Seed the RNG */
+	srand(time(NULL));
+
+	status = GAME_OF_LIFE_allocate_grid(h_current);
+	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
+	{
+		printf("GAME_OF_LIFE_allocate_grid failed\n");
+		goto l_cleanup;
+	}
+
+	status = GAME_OF_LIFE_allocate_grid(h_next);
+	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
+	{
+		printf("GAME_OF_LIFE_allocate_grid failed\n");
+		goto l_cleanup;
+	}
+
+	status = GAME_OF_LIFE_init_grid(*h_current);
 	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
 	{
 		printf("init_grid failed\n");
 		goto l_cleanup;
 	}
 
-	// Game Loop
+	/* Game Loop */
 	while (!WindowShouldClose())
 	{
-		old_grid = curr_grid;
+		printf("Generation: %d\n", gen);
 
-		/*
-			eval(old_grid) for all in grid
-			modify(curr_grid)
-		*/
-
-		status = GAME_OF_LIFE_ARTIST_draw_grid(curr_grid);
+		status = GAME_OF_LIFE_ARTIST_draw_grid(*h_current);
 		if (GAME_OF_LIFE_STATUS_SUCCESS != status)
 		{
-			printf("Crashed!\n");
+			printf("GAME_OF_LIFE_ARTIST_draw_grid failed!\n");
 			goto l_cleanup;
 		}
-	}
 
-	// Cleanup
+		status = GAME_OF_LIFE_calc_next_generation(*h_current, *h_next);
+		if (GAME_OF_LIFE_STATUS_SUCCESS != status)
+		{
+			printf("GAME_OF_LIFE_calc_next_generation failed!\n");
+			goto l_cleanup;
+		}
+
+		/* Swap the pointers of the grids */
+		tmp = *h_current;
+		*h_current = *h_next;
+		*h_next = tmp;
+
+		gen++;
+	}
 
 l_cleanup:
 	CloseWindow();
+	free(curr_grid);
+	free(next_grid);
 
 	return (int)status;
 }

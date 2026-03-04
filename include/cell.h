@@ -14,6 +14,11 @@
 #include <sys/types.h>
 #include "raylib.h"
 
+/*** Defines ***/
+
+#define DEAD (0)
+#define ALIVE (1)
+
 /*** Structs ***/
 
 /**

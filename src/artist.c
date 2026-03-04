@@ -27,10 +27,10 @@ game_of_life_status_e GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid)
         for (size_t j = 0; j < GRID_WIDTH; j++)
         {
             rect = &grid[i][j].rect;
-            if (grid[i][j].state == 1)
-                DrawRectangle(rect->x, rect->y, rect->width, rect->height, BLACK);
+            if (ALIVE == grid[i][j].state)
+                DrawRectangle(rect->x, rect->y, rect->width, rect->height, BLUE);
             else
-                DrawRectangle(rect->x, rect->y, rect->width, rect->height, GOLD);
+                DrawRectangle(rect->x, rect->y, rect->width, rect->height, BLACK);
 
             DrawRectangleLinesEx(*rect, 1, RAYWHITE);
         }
