@@ -49,6 +49,19 @@ int main(void)
 		goto l_cleanup;
 	}
 
+	while (true)
+	{
+		if (WindowShouldClose())
+			goto l_cleanup;
+		if (KEY_SPACE == GetKeyPressed())
+			break;
+		BeginDrawing();
+		ClearBackground(BLACK);
+		DrawText("Press SPACE to start", 0, SCREEN_HEIGHT / 2, 32, RAYWHITE);
+		EndDrawing();
+		continue;
+	}
+
 	/* Game Loop */
 	while (!WindowShouldClose())
 	{
@@ -78,8 +91,11 @@ int main(void)
 
 l_cleanup:
 	CloseWindow();
-	free(curr_grid);
-	free(next_grid);
+	GAME_OF_LIFE_free_grid(curr_grid);
+	GAME_OF_LIFE_free_grid(next_grid);
+	h_current = NULL;
+	h_next = NULL;
+	tmp = NULL;
 
 	return (int)status;
 }

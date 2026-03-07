@@ -59,3 +59,10 @@ game_of_life_status_e GAME_OF_LIFE_check_cell(cell_s **old_grid, cell_s **new_gr
  * @return game_of_life_status_e
  */
 game_of_life_status_e GAME_OF_LIFE_calc_next_generation(cell_s **old_grid, cell_s **new_grid);
+
+/**
+ * @brief Frees a given grid.
+ *
+ * @param grid The grid to be freed.
+ */
+void GAME_OF_LIFE_free_grid(cell_s **grid);

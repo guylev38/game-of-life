@@ -120,3 +120,11 @@ l_cleanup:
     ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
     return ret_code;
 }
+
+void GAME_OF_LIFE_free_grid(cell_s **grid)
+{
+    for (size_t i = 0; i < GRID_HEIGHT; i++)
+    {
+        free(grid[i]);
+    }
+}
