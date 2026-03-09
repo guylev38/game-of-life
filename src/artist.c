@@ -15,9 +15,8 @@
 
 /*** Functions ***/
 
-game_of_life_status_e GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid)
+void GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid)
 {
-    game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
     Rectangle *rect = NULL;
 
     BeginDrawing();
@@ -36,8 +35,4 @@ game_of_life_status_e GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid)
         }
     }
     EndDrawing();
-
-l_cleanup:
-    ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
-    return ret_code;
 }

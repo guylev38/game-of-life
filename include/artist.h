@@ -30,8 +30,7 @@
  * @brief Draws the grid from a 2D array of Cell structs.
  *
  * @param[in] grid 2D array of Cell structs representing the grid.
- * @return game_of_life_status_e
  */
-game_of_life_status_e GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid);
+void GAME_OF_LIFE_ARTIST_draw_grid(cell_s **grid);
 
 #endif

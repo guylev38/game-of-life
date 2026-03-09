@@ -10,6 +10,7 @@
 #include "raylib.h"
 #include "../include/artist.h"
 #include "../include/game_of_life.h"
+#include "../include/dlog.h"
 
 /*** Functions ***/
 
@@ -25,29 +26,23 @@ int main(void)
 	cell_s ***h_current = &curr_grid, ***h_next = &next_grid, **tmp = NULL;
 	size_t gen = 0;
 
-	/* Seed the RNG */
-	srand(time(NULL));
+	srand(time(NULL)); /* Seed the RNG */
 
 	status = GAME_OF_LIFE_allocate_grid(h_current);
 	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
 	{
-		printf("GAME_OF_LIFE_allocate_grid failed\n");
+		DLOG_ERROR("Failed to allocate h_current\n");
 		goto l_cleanup;
 	}
 
 	status = GAME_OF_LIFE_allocate_grid(h_next);
 	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
 	{
-		printf("GAME_OF_LIFE_allocate_grid failed\n");
+		DLOG_ERROR("Failed to allocate h_next!\n");
 		goto l_cleanup;
 	}
 
-	status = GAME_OF_LIFE_init_grid(*h_current);
-	if (GAME_OF_LIFE_STATUS_SUCCESS != status)
-	{
-		printf("init_grid failed\n");
-		goto l_cleanup;
-	}
+	GAME_OF_LIFE_init_grid(*h_current);
 
 	while (true)
 	{
@@ -65,21 +60,11 @@ int main(void)
 	/* Game Loop */
 	while (!WindowShouldClose())
 	{
-		printf("Generation: %d\n", gen);
+		DLOG_INFO("Generation: %d\n", gen);
 
-		status = GAME_OF_LIFE_ARTIST_draw_grid(*h_current);
-		if (GAME_OF_LIFE_STATUS_SUCCESS != status)
-		{
-			printf("GAME_OF_LIFE_ARTIST_draw_grid failed!\n");
-			goto l_cleanup;
-		}
+		GAME_OF_LIFE_ARTIST_draw_grid(*h_current);
 
-		status = GAME_OF_LIFE_calc_next_generation(*h_current, *h_next);
-		if (GAME_OF_LIFE_STATUS_SUCCESS != status)
-		{
-			printf("GAME_OF_LIFE_calc_next_generation failed!\n");
-			goto l_cleanup;
-		}
+		GAME_OF_LIFE_calc_next_generation(*h_current, *h_next);
 
 		/* Swap the pointers of the grids */
 		tmp = *h_current;

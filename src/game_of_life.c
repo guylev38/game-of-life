@@ -14,6 +14,7 @@
 #include "../include/game_of_life.h"
 #include "../include/game_of_life_s.h"
 #include "../include/artist.h"
+#include "../include/dlog.h"
 
 /*** Functions ***/
 
@@ -22,9 +23,23 @@ game_of_life_status_e GAME_OF_LIFE_allocate_grid(cell_s ***grid)
     game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
 
     cell_s **tmp_grid = (cell_s **)calloc(GRID_HEIGHT, sizeof(cell_s *));
+    if (NULL == tmp_grid)
+    {
+        DLOG_ERROR("calloc failed to allocate **tmp_grid!\n");
+        ret_code = GAME_OF_LIFE_STATUS_GAME_OF_LIFE_ALLOCATE_GRID_TMP_GRID_CALLOC_FAILED;
+        goto l_cleanup;
+    }
 
     for (size_t i = 0; i < GRID_HEIGHT; i++)
+    {
         tmp_grid[i] = (cell_s *)calloc(GRID_WIDTH, sizeof(cell_s));
+        if (NULL == tmp_grid[i])
+        {
+            DLOG_ERROR("calloc failed to allocate!\n");
+            ret_code = GAME_OF_LIFE_STATUS_GAME_OF_LIFE_ALLOCATE_GRID_TMP_GRID_INNER_CALLOC_FAILED;
+            goto l_cleanup;
+        }
+    }
 
 l_cleanup:
     ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
@@ -33,10 +48,16 @@ l_cleanup:
     return ret_code;
 }
 
-game_of_life_status_e GAME_OF_LIFE_init_grid(cell_s **grid)
+void GAME_OF_LIFE_free_grid(cell_s **grid)
 {
-    game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
+    for (size_t i = 0; i < GRID_HEIGHT; i++)
+    {
+        free(grid[i]);
+    }
+}
 
+void GAME_OF_LIFE_init_grid(cell_s **grid)
+{
     u_int32_t state = 0;
 
     for (size_t i = 0; i < GRID_HEIGHT; i++)
@@ -47,15 +68,10 @@ game_of_life_status_e GAME_OF_LIFE_init_grid(cell_s **grid)
             grid[i][j] = (cell_s){.rect = (Rectangle){.x = j * CELL_SIZE, .y = i * CELL_SIZE, CELL_SIZE, CELL_SIZE}, .state = state};
         }
     }
-
-l_cleanup:
-    ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
-    return ret_code;
 }
 
-game_of_life_status_e GAME_OF_LIFE_calc_neighbours(cell_s **grid, u_int32_t x, u_int32_t y, u_int32_t *n)
+void GAME_OF_LIFE_calc_neighbours(cell_s **grid, u_int32_t x, u_int32_t y, u_int32_t *n)
 {
-    game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
     size_t n_x = 0, n_y = 0;
 
     for (ssize_t i = -1; i <= 1; i++)
@@ -72,23 +88,13 @@ game_of_life_status_e GAME_OF_LIFE_calc_neighbours(cell_s **grid, u_int32_t x, u
                 (*n)++;
         }
     }
-
-l_cleanup:
-    ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
-    return ret_code;
 }
 
-game_of_life_status_e GAME_OF_LIFE_check_cell(cell_s **old_grid, cell_s **new_grid, u_int32_t x, u_int32_t y)
+void GAME_OF_LIFE_check_cell(cell_s **old_grid, cell_s **new_grid, u_int32_t x, u_int32_t y)
 {
-    game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
     u_int32_t n = 0;
 
-    ret_code = GAME_OF_LIFE_calc_neighbours(old_grid, x, y, &n);
-    if (GAME_OF_LIFE_STATUS_SUCCESS != ret_code)
-    {
-        printf("calc_neighbours failed!\n");
-        goto l_cleanup;
-    }
+    GAME_OF_LIFE_calc_neighbours(old_grid, x, y, &n);
 
     if (ALIVE == old_grid[y][x].state)
         new_grid[y][x].state = (n == 2 || n == 3);
@@ -96,35 +102,16 @@ game_of_life_status_e GAME_OF_LIFE_check_cell(cell_s **old_grid, cell_s **new_gr
         new_grid[y][x].state = (n == 3);
 
     new_grid[y][x].rect = old_grid[y][x].rect;
-
-l_cleanup:
-    ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
-    return ret_code;
 }
 
-game_of_life_status_e GAME_OF_LIFE_calc_next_generation(cell_s **old_grid, cell_s **new_grid)
+void GAME_OF_LIFE_calc_next_generation(cell_s **old_grid, cell_s **new_grid)
 {
-    game_of_life_status_e ret_code = GAME_OF_LIFE_STATUS_UNINITIALIZED;
 
     for (size_t i = 0; i < GRID_HEIGHT; i++)
     {
         for (size_t j = 0; j < GRID_WIDTH; j++)
         {
-            ret_code = GAME_OF_LIFE_check_cell(old_grid, new_grid, j, i);
-            if (GAME_OF_LIFE_STATUS_SUCCESS != ret_code)
-                goto l_cleanup;
+            GAME_OF_LIFE_check_cell(old_grid, new_grid, j, i);
         }
-    }
-
-l_cleanup:
-    ret_code = GAME_OF_LIFE_STATUS_SUCCESS;
-    return ret_code;
-}
-
-void GAME_OF_LIFE_free_grid(cell_s **grid)
-{
-    for (size_t i = 0; i < GRID_HEIGHT; i++)
-    {
-        free(grid[i]);
     }
 }

@@ -67,6 +67,31 @@
       "-std=c++17",
       "-c",
       "-o",
+      "obj/x64/Debug/game-of-life/dlog.o",
+      "include/dlog.h"
+    ],
+    "directory": "/home/dov/Projects/game-of-life/",
+    "file": "/home/dov/Projects/game-of-life/include/dlog.h",
+    "output": "/home/dov/Projects/game-of-life/obj/x64/Debug/game-of-life/dlog.o"
+  },
+  {
+    "arguments": [
+      "g++",
+      "-MD",
+      "-MP",
+      "-DDEBUG",
+      "-DPLATFORM_DESKTOP",
+      "-DGRAPHICS_API_OPENGL_33",
+      "-D_GLFW_X11",
+      "-Isrc",
+      "-Iinclude",
+      "-Ibuild/external/raylib-master/src",
+      "-m64",
+      "-Wshadow",
+      "-g",
+      "-std=c++17",
+      "-c",
+      "-o",
       "obj/x64/Debug/game-of-life/game_of_life.o",
       "include/game_of_life.h"
     ],
