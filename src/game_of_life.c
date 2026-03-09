@@ -25,7 +25,7 @@ game_of_life_status_e GAME_OF_LIFE_allocate_grid(cell_s ***grid)
     cell_s **tmp_grid = (cell_s **)calloc(GRID_HEIGHT, sizeof(cell_s *));
     if (NULL == tmp_grid)
     {
-        DLOG_ERROR("calloc failed to allocate **tmp_grid!\n");
+        DLOG_ERROR("Failed to allocate **tmp_grid!\n");
         ret_code = GAME_OF_LIFE_STATUS_GAME_OF_LIFE_ALLOCATE_GRID_TMP_GRID_CALLOC_FAILED;
         goto l_cleanup;
     }
@@ -35,7 +35,7 @@ game_of_life_status_e GAME_OF_LIFE_allocate_grid(cell_s ***grid)
         tmp_grid[i] = (cell_s *)calloc(GRID_WIDTH, sizeof(cell_s));
         if (NULL == tmp_grid[i])
         {
-            DLOG_ERROR("calloc failed to allocate!\n");
+            DLOG_ERROR("Failed to allocate tmp_grid[i]!\n");
             ret_code = GAME_OF_LIFE_STATUS_GAME_OF_LIFE_ALLOCATE_GRID_TMP_GRID_INNER_CALLOC_FAILED;
             goto l_cleanup;
         }
